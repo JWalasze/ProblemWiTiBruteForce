@@ -22,20 +22,15 @@ namespace ThreadsAlgorithm
             foreach (Thread x in threads)
                 x.Start();
             Console.Read();*/
-            List<int> list = new List<int>();
-            list.Add(1);
-            list.Add(2);
-            list.Add(3);
-            list.Add(6); /*
-            Console.WriteLine(list[0] + ", " + list[1] + ", " + list[2] + ", " + list[3]);
-            list.Swap(0, 3);
-            Console.WriteLine(list[0] + ", " + list[1] + ", " + list[2] + ", " + list[3]);
-            list.Swap(0, 3);
-            Console.WriteLine(list[0] + ", " + list[1] + ", " + list[2] + ", " + list[3]);
-            Console.Read();*/
-            FindPermutations findObj = new FindPermutations(4);
+            List<WitiTask> list = new List<WitiTask>();
+            list.Add(new WitiTask(2,3,4));
+            list.Add(new WitiTask(4,3,3));
+            list.Add(new WitiTask(1,4,5));
+            list.Add(new WitiTask(3,2,2)); 
+            
+            FindPermutations findObj = new FindPermutations(list);
             Console.WriteLine("Zaczynamy: ");
-            findObj.Permutations(list, 0, 10);
+            findObj.Permutations(0, 0, 0);
             Console.WriteLine("Kończymy!!!");
             Console.ReadLine();
         }

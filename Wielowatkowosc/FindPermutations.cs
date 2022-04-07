@@ -8,21 +8,25 @@ namespace ThreadsAlgorithm
 {
     internal class FindPermutations
     {
-        readonly int amountOfTasks;
-        public static int ind = 0;
+        List<WitiTask> lista;
 
-        public FindPermutations(int value)
+        public FindPermutations(List<WitiTask> _tasks)
         {
-            amountOfTasks = value;
+            lista = _tasks;
         }
 
-        public void Permutations(List<int> lista, int begin, int penaulty)
+        public void Permutations(int begin, int penalty, int C)
         {
-            if (begin == lista.Count()-1)
+            if (begin == lista.Count() - 1)
             {
-                Console.WriteLine(lista.MyToString());
-                //Liczenie kary
-                //Sprawdzenie z tablicą z maina, czy jest to lepsza 'kara' -> tutaj mutex
+                int last_item = lista.Count() - 1;
+                int Ci = C + lista[last_item].P;
+                int new_penalty = penalty;
+                if (Ci > lista[last_item].D)
+                {
+                    new_penalty += lista[last_item].Weight * (Ci - lista[last_item].D);
+                }
+                Console.WriteLine(lista.MyToString() + "Kara: " + new_penalty);
                 return;
             }
 
@@ -32,8 +36,13 @@ namespace ThreadsAlgorithm
                 for (int i = begin; i < lista.Count(); ++i)
                 {
                     lista.Swap(begin, i);
-                    //Liczenie kary posrednie
-                    this.Permutations(lista, temp_begin, penaulty);
+                    int Ci = C + lista[begin].P;
+                    int new_penalty = penalty;
+                    if (Ci > lista[begin].D)
+                    {
+                        new_penalty += lista[begin].Weight * (Ci - lista[begin].D);
+                    }
+                    this.Permutations(temp_begin, new_penalty, Ci);
                     lista.Swap(begin, i);
                 }
             }
@@ -44,7 +53,6 @@ namespace ThreadsAlgorithm
     {
         public static void Swap<T>(this List<T> lista, int i, int j)
         {
-            //Console.WriteLine("Indeksy: " + i + ", " + j);
             T temp = lista[i];
             lista[i] = lista[j];
             lista[j] = temp;

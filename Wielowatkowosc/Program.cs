@@ -11,50 +11,69 @@ namespace ThreadsAlgorithm
     {
         static void Main(string[] args)
         {
-            /*int n = 10;
-            Test t = new Test();
+            int n = 4;
+            List<WitiTask> list = new List<WitiTask>();
+            list.Add(new WitiTask(2, 3, 4));
+            list.Add(new WitiTask(4, 3, 3));
+            list.Add(new WitiTask(1, 4, 5));
+            list.Add(new WitiTask(3, 2, 2));
+            list.Add(new WitiTask(4, 1, 1));
+            list.Add(new WitiTask(5, 2, 3));
+            FindPermutations findObj = new FindPermutations(list);
+
+            WitiTask[] tab1 = new WitiTask[list.Count];
+            list.CopyTo(tab1);
+            List<WitiTask> list1 = tab1.ToList();
+
+            WitiTask[] tab2 = new WitiTask[list.Count];
+            list.CopyTo(tab2);
+            List<WitiTask> list2 = tab2.ToList();
+
+            WitiTask[] tab3 = new WitiTask[list.Count];
+            list.CopyTo(tab3);
+            List<WitiTask> list3 = tab3.ToList();
+
+            List<List<WitiTask>> g_list = new List<List<WitiTask>>();
+            g_list.Add(list);
+            g_list.Add(list1);
+            g_list.Add(list2);
+            g_list.Add(list3);
+
+            //var watch = System.Diagnostics.Stopwatch.StartNew();
             Thread[] threads = new Thread[n];
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < n; ++i)
             {
-                threads[i] = new Thread(t.Welcome);
+                int temp = i;
+                threads[i] = new Thread(() => findObj.Permutations(g_list[temp], temp));
                 threads[i].Name = String.Format("Thread: {0}", i);
             }
+            var watch = System.Diagnostics.Stopwatch.StartNew();
             foreach (Thread x in threads)
+            {
                 x.Start();
-            Console.Read();*/
-            List<WitiTask> list = new List<WitiTask>();
-            list.Add(new WitiTask(2,3,4));
-            list.Add(new WitiTask(4,3,3));
-            list.Add(new WitiTask(1,4,5));
-            list.Add(new WitiTask(3,2,2));
+            }
+            for (int i = 0; i < n; i++)
+            {
+                threads[i].Join();
+            }
+            watch.Stop();
+            var elapsedMs = watch.ElapsedMilliseconds;
+            Console.WriteLine(elapsedMs + " ms");
+            Console.ReadLine();
 
-            /*List<WitiTask> list3 = list;
-            WitiTask[] tab = new WitiTask[list.Count];
-            list.CopyTo(tab);
-            List<WitiTask> list2 = tab.ToList();*/
-                
             //Console.WriteLine("czy są równe: " + Object.ReferenceEquals(list, list2));
             //Console.WriteLine("czy są równe: " + Object.ReferenceEquals(list, list3));
 
-            FindPermutations findObj = new FindPermutations(list);
-            Console.WriteLine("Zaczynamy: ");
-            findObj.Permutations(list);
+            /*Console.ReadLine();
+            var watch1 = System.Diagnostics.Stopwatch.StartNew();
+            
+            findObj.Permutations(list, 0);
+            
+            watch1.Stop();
+            var elapsedMs1 = watch1.ElapsedMilliseconds;
+            Console.WriteLine(elapsedMs1 + " ms");*/
             Console.WriteLine(findObj.Resualt.ToString());
-            Console.WriteLine("Kończymy!!!");
             Console.ReadLine();
-        }
-        public class Test
-        {
-            public void Welcome()
-            {
-                lock (this)
-                {
-                    Console.WriteLine("Hallo " + Thread.CurrentThread.Name + "!");
-                    for (int i = 0; i < 10; i++)
-                        Console.Write(i + " ");
-                    Console.WriteLine("");
-                }
-            }
         }
     }
 }

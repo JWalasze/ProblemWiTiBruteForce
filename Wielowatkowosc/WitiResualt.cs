@@ -10,6 +10,7 @@ namespace ThreadsAlgorithm
     {
         private List<WitiTask> permutation;
         private int penaulty;
+        private int number_of_tasks;
 
         public List<WitiTask> Permutation 
         { 
@@ -23,17 +24,19 @@ namespace ThreadsAlgorithm
             set { penaulty = value; }
         }
 
-        public WitiResualt()
+        public WitiResualt(int _tasks_number)
         {
             permutation = new List<WitiTask>();
             penaulty = 2147483647;
+            number_of_tasks = _tasks_number;
         }
 
         public override string ToString()
         {
             string str = String.Empty;
             str += "Optymalna wartość kary: " + penaulty + Environment.NewLine;
-            str += "Znaleziona permutacja: " + permutation.MyToString() + Environment.NewLine;
+            str += "Znalezione permutacje: ";
+            str += permutation.MyToString(number_of_tasks);
             return str;
         }
 

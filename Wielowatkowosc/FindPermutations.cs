@@ -8,22 +8,29 @@ namespace ThreadsAlgorithm
 {
     internal class FindPermutations
     {
-        WitiResualt resualt;
+        private WitiResualt resualt;
+        private int number_of_tasks;
 
         public FindPermutations(List<WitiTask> _tasks)
         {
-            resualt = new WitiResualt();
+            number_of_tasks = _tasks.Count;
+            resualt = new WitiResualt(number_of_tasks);
         }
 
         public WitiResualt Resualt { get { return resualt; } }
 
-        public void Permutations(List<WitiTask> lista)
+        public int NumberOfTasks { get { return number_of_tasks; } }
+
+        public void Permutations(List<WitiTask> lista, int first_digit)
         {
-            WitiTask[] tab = new WitiTask[lista.Count];
-            lista.CopyTo(tab);
-            List<WitiTask> list2 = tab.ToList();
-            Console.WriteLine("czy są równe: " + Object.ReferenceEquals(lista, list2));
-            Permutations(list2, 0, 0, 0);
+            lista.Swap(0, first_digit);
+            int Ci = lista[0].P;
+            int new_penalty = 0;
+            if (Ci > lista[0].D)
+            {
+                new_penalty += lista[0].Weight * (Ci - lista[0].D);
+            }
+            Permutations(lista, 1, new_penalty, Ci);
         }
 
         private void Permutations(List<WitiTask> lista, int begin, int penalty, int C)
@@ -40,10 +47,20 @@ namespace ThreadsAlgorithm
                 
                 lock(resualt)
                 {
+                    Console.Write("kara: " + new_penalty);
+                    Console.WriteLine(lista.MyToString(this.NumberOfTasks) + Environment.NewLine);
                     if (resualt.Penaulty > new_penalty)
                     {
                         resualt.Penaulty = new_penalty;
                         resualt.Permutation.Clear();
+                        foreach (var item in lista)
+                        {
+                            resualt.Permutation.Add(item);
+                        }
+                    }
+
+                    else if (resualt.Penaulty == new_penalty)
+                    {
                         foreach (var item in lista)
                         {
                             resualt.Permutation.Add(item);
@@ -79,12 +96,21 @@ namespace ThreadsAlgorithm
             (lista[j], lista[i]) = (lista[i], lista[j]);
         }
 
-        public static string MyToString<T>(this List<T> lista)
+        public static string MyToString<WitiTask>(this List<WitiTask> lista, int number_of_tasks)
         {
             string str = string.Empty;
+            int counter = 0;
+            int perm_counter = 0;
             foreach (var item in lista)
             {
-                str += item.ToString() + " ";
+                if (counter % number_of_tasks == 0)
+                {
+                    ++perm_counter;
+                    str += Environment.NewLine;
+                    str += perm_counter.ToString() + " permutacja: ";
+                }
+                ++counter;
+                str += item.ToString() + " "; 
             }
             return str;
         }

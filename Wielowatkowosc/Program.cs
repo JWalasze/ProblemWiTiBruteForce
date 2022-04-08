@@ -26,11 +26,20 @@ namespace ThreadsAlgorithm
             list.Add(new WitiTask(2,3,4));
             list.Add(new WitiTask(4,3,3));
             list.Add(new WitiTask(1,4,5));
-            list.Add(new WitiTask(3,2,2)); 
-            
+            list.Add(new WitiTask(3,2,2));
+
+            /*List<WitiTask> list3 = list;
+            WitiTask[] tab = new WitiTask[list.Count];
+            list.CopyTo(tab);
+            List<WitiTask> list2 = tab.ToList();*/
+                
+            //Console.WriteLine("czy są równe: " + Object.ReferenceEquals(list, list2));
+            //Console.WriteLine("czy są równe: " + Object.ReferenceEquals(list, list3));
+
             FindPermutations findObj = new FindPermutations(list);
             Console.WriteLine("Zaczynamy: ");
-            findObj.Permutations(0, 0, 0);
+            findObj.Permutations(list);
+            Console.WriteLine(findObj.Resualt.ToString());
             Console.WriteLine("Kończymy!!!");
             Console.ReadLine();
         }

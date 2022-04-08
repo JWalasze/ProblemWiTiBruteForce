@@ -34,7 +34,7 @@ namespace ThreadsAlgorithm
         {
             string str = string.Empty;
 
-            str += "Index: " + index + " ";
+            str += index + " ";
 
             return str;
         }

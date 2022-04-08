@@ -46,6 +46,7 @@
     <Compile Include="FindPermutations.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WitiResualt.cs" />
     <Compile Include="WitiTask.cs" />
   </ItemGroup>
   <ItemGroup>

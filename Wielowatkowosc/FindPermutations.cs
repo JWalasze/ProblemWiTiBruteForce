@@ -8,14 +8,25 @@ namespace ThreadsAlgorithm
 {
     internal class FindPermutations
     {
-        List<WitiTask> lista;
+        WitiResualt resualt;
 
         public FindPermutations(List<WitiTask> _tasks)
         {
-            lista = _tasks;
+            resualt = new WitiResualt();
         }
 
-        public void Permutations(int begin, int penalty, int C)
+        public WitiResualt Resualt { get { return resualt; } }
+
+        public void Permutations(List<WitiTask> lista)
+        {
+            WitiTask[] tab = new WitiTask[lista.Count];
+            lista.CopyTo(tab);
+            List<WitiTask> list2 = tab.ToList();
+            Console.WriteLine("czy są równe: " + Object.ReferenceEquals(lista, list2));
+            Permutations(list2, 0, 0, 0);
+        }
+
+        private void Permutations(List<WitiTask> lista, int begin, int penalty, int C)
         {
             if (begin == lista.Count() - 1)
             {
@@ -26,7 +37,19 @@ namespace ThreadsAlgorithm
                 {
                     new_penalty += lista[last_item].Weight * (Ci - lista[last_item].D);
                 }
-                Console.WriteLine(lista.MyToString() + "Kara: " + new_penalty);
+                
+                lock(resualt)
+                {
+                    if (resualt.Penaulty > new_penalty)
+                    {
+                        resualt.Penaulty = new_penalty;
+                        resualt.Permutation.Clear();
+                        foreach (var item in lista)
+                        {
+                            resualt.Permutation.Add(item);
+                        }
+                    }
+                }
                 return;
             }
 
@@ -42,7 +65,7 @@ namespace ThreadsAlgorithm
                     {
                         new_penalty += lista[begin].Weight * (Ci - lista[begin].D);
                     }
-                    this.Permutations(temp_begin, new_penalty, Ci);
+                    this.Permutations(lista, temp_begin, new_penalty, Ci);
                     lista.Swap(begin, i);
                 }
             }
@@ -53,17 +76,15 @@ namespace ThreadsAlgorithm
     {
         public static void Swap<T>(this List<T> lista, int i, int j)
         {
-            T temp = lista[i];
-            lista[i] = lista[j];
-            lista[j] = temp;
+            (lista[j], lista[i]) = (lista[i], lista[j]);
         }
-        
+
         public static string MyToString<T>(this List<T> lista)
         {
             string str = string.Empty;
             foreach (var item in lista)
             {
-                str += item.ToString() + ", ";
+                str += item.ToString() + " ";
             }
             return str;
         }

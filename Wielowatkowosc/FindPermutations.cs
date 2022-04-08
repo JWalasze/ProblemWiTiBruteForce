@@ -21,9 +21,9 @@ namespace ThreadsAlgorithm
 
         public int NumberOfTasks { get { return number_of_tasks; } }
 
-        public void Permutations(List<WitiTask> lista, int first_digit)
+        public void Permutations(List<WitiTask> lista, int selected_digit)
         {
-            lista.Swap(0, first_digit);
+            lista.Swap(0, selected_digit);
             int Ci = lista[0].P;
             int new_penalty = 0;
             if (Ci > lista[0].D)
@@ -31,6 +31,11 @@ namespace ThreadsAlgorithm
                 new_penalty += lista[0].Weight * (Ci - lista[0].D);
             }
             Permutations(lista, 1, new_penalty, Ci);
+        }
+
+        public void Permutations(List<WitiTask> lista)
+        {
+            Permutations(lista, 0, 0, 0);
         }
 
         private void Permutations(List<WitiTask> lista, int begin, int penalty, int C)
@@ -96,7 +101,7 @@ namespace ThreadsAlgorithm
             (lista[j], lista[i]) = (lista[i], lista[j]);
         }
 
-        public static string MyToString<WitiTask>(this List<WitiTask> lista, int number_of_tasks)
+        public static string MyToString<T>(this List<T> lista, int number_of_tasks)
         {
             string str = string.Empty;
             int counter = 0;

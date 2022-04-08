@@ -39,7 +39,8 @@ namespace ThreadsAlgorithm
             g_list.Add(list2);
             g_list.Add(list3);
 
-            //var watch = System.Diagnostics.Stopwatch.StartNew();
+            //Wiele watków znajduje permutacje
+            /*var watch = System.Diagnostics.Stopwatch.StartNew();
             Thread[] threads = new Thread[n];
             for (int i = 0; i < n; ++i)
             {
@@ -47,7 +48,6 @@ namespace ThreadsAlgorithm
                 threads[i] = new Thread(() => findObj.Permutations(g_list[temp], temp));
                 threads[i].Name = String.Format("Thread: {0}", i);
             }
-            var watch = System.Diagnostics.Stopwatch.StartNew();
             foreach (Thread x in threads)
             {
                 x.Start();
@@ -59,19 +59,15 @@ namespace ThreadsAlgorithm
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;
             Console.WriteLine(elapsedMs + " ms");
-            Console.ReadLine();
+            Console.WriteLine(findObj.Resualt.ToString());
+            Console.ReadLine();*/
 
-            //Console.WriteLine("czy są równe: " + Object.ReferenceEquals(list, list2));
-            //Console.WriteLine("czy są równe: " + Object.ReferenceEquals(list, list3));
-
-            /*Console.ReadLine();
+            //Jeden wątek znajduje permutacje
             var watch1 = System.Diagnostics.Stopwatch.StartNew();
-            
-            findObj.Permutations(list, 0);
-            
+            findObj.Permutations(list);
             watch1.Stop();
             var elapsedMs1 = watch1.ElapsedMilliseconds;
-            Console.WriteLine(elapsedMs1 + " ms");*/
+            Console.WriteLine(elapsedMs1 + " ms");
             Console.WriteLine(findObj.Resualt.ToString());
             Console.ReadLine();
         }

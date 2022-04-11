@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace ThreadsAlgorithm
 {
@@ -11,9 +12,9 @@ namespace ThreadsAlgorithm
         private WitiResualt resualt;
         private int number_of_tasks;
 
-        public FindPermutations(List<WitiTask> _tasks)
+        public FindPermutations(int _tasks)
         {
-            number_of_tasks = _tasks.Count;
+            number_of_tasks = _tasks;
             resualt = new WitiResualt(number_of_tasks);
         }
 
@@ -23,6 +24,7 @@ namespace ThreadsAlgorithm
 
         public void Permutations(List<WitiTask> lista, int selected_digit)
         {
+            Thread.Sleep(500);
             lista.Swap(0, selected_digit);
             int Ci = lista[0].P;
             int new_penalty = 0;
@@ -31,6 +33,7 @@ namespace ThreadsAlgorithm
                 new_penalty += lista[0].Weight * (Ci - lista[0].D);
             }
             Permutations(lista, 1, new_penalty, Ci);
+            lista.Swap(0, selected_digit);
         }
 
         public void Permutations(List<WitiTask> lista)

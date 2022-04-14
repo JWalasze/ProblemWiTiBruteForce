@@ -11,54 +11,35 @@ namespace ThreadsAlgorithm
     {
         static void Main(string[] args)
         {
-            int n = 6;
+            var rand = new Random();
+            int n = 3;
+            int number_of_tasks = 9;
+            int temp_number = 3;
             List<WitiTask> list = new List<WitiTask>();
-            list.Add(new WitiTask(2, 3, 4));
-            list.Add(new WitiTask(4, 3, 3));
-            list.Add(new WitiTask(1, 4, 5));
-            list.Add(new WitiTask(3, 2, 2));
-            list.Add(new WitiTask(4, 1, 1));
-            list.Add(new WitiTask(5, 2, 3));
+            for (int i = 0; i < number_of_tasks; i++)
+            {
+                list.Add(new WitiTask(rand.Next(1,19), rand.Next(1,19), rand.Next(1,19)));
+            }
+            
             FindPermutations findObj = new FindPermutations(list.Count);
 
             WitiTask[] tab1 = new WitiTask[list.Count];
             list.CopyTo(tab1);
             List<WitiTask> list1 = tab1.ToList();
-
-            WitiTask[] tab2 = new WitiTask[list.Count];
-            list.CopyTo(tab2);
-            List<WitiTask> list2 = tab2.ToList();
-
-            WitiTask[] tab3 = new WitiTask[list.Count];
-            list.CopyTo(tab3);
-            List<WitiTask> list3 = tab3.ToList();
-
-            WitiTask[] tab4 = new WitiTask[list.Count];
-            list.CopyTo(tab4);
-            List<WitiTask> list4 = tab4.ToList();
-
-            WitiTask[] tab5 = new WitiTask[list.Count];
-            list.CopyTo(tab5);
-            List<WitiTask> list5 = tab5.ToList();
-
-            List<List<WitiTask>> g_list = new List<List<WitiTask>>();
-            g_list.Add(list);
-            g_list.Add(list1);
-            g_list.Add(list2);
-            g_list.Add(list3);
-            g_list.Add(list4);
-            g_list.Add(list5);
+            FindPermutations findObj1 = new FindPermutations(list1.Count);
 
             //Wiele watków znajduje permutacje
-            var watch = System.Diagnostics.Stopwatch.StartNew();
+            
             Thread[] threads = new Thread[n];
-
+            int temp = 0;
             for (int i = 0; i < n; ++i)
             {
-                int temp = i;
-                threads[i] = new Thread(() => findObj.Permutations(g_list[temp], temp));
+                int temp_i = temp;
+                threads[i] = new Thread(() => findObj.Permutations(list, temp_i, temp_number));
+                temp += temp_number;
             }
 
+            var watch = System.Diagnostics.Stopwatch.StartNew();
             foreach (Thread x in threads)
             {
                 x.Start();
@@ -76,18 +57,15 @@ namespace ThreadsAlgorithm
             Console.ReadLine();
 
             //Jeden wątek znajduje permutacje
-            /*var watch1 = System.Diagnostics.Stopwatch.StartNew();
-             
-            for (int i = 0; i < n; i++)
-            {
-                findObj.Permutations(g_list[i], i);
-            }
+            var watch1 = System.Diagnostics.Stopwatch.StartNew();
+
+            findObj1.Permutations(list1);
 
             watch1.Stop();
             var elapsedMs1 = watch1.ElapsedMilliseconds;
             Console.WriteLine("Czas trwania szukania optymalnej permutacji: " + elapsedMs1 + " ms");
-            Console.WriteLine(findObj.Resualt.ToString());
-            Console.ReadLine();*/
+            Console.WriteLine(findObj1.Resualt.ToString());
+            Console.ReadLine();
         }
     }
 }

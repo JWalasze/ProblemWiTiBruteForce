@@ -22,18 +22,26 @@ namespace ThreadsAlgorithm
 
         public int NumberOfTasks { get { return number_of_tasks; } }
 
-        public void Permutations(List<WitiTask> lista, int selected_digit)
+        public void Permutations(List<WitiTask> lista, int selected_digit, int end_digit)
         {
-            Thread.Sleep(500);
-            lista.Swap(0, selected_digit);
-            int Ci = lista[0].P;
-            int new_penalty = 0;
-            if (Ci > lista[0].D)
+            //Thread.Sleep(300);
+            for (int i = 0; i < end_digit; i++)
             {
-                new_penalty += lista[0].Weight * (Ci - lista[0].D);
+                WitiTask[] tab1 = new WitiTask[lista.Count];
+                lista.CopyTo(tab1);
+                List<WitiTask> list1 = tab1.ToList();
+
+                list1.Swap(0, selected_digit+i);
+                int Ci = list1[0].P;
+                int new_penalty = 0;
+                if (Ci > list1[0].D)
+                {
+                    new_penalty += list1[0].Weight * (Ci - list1[0].D);
+                }
+                Permutations(list1, 1, new_penalty, Ci);
+                list1.Swap(0, selected_digit+i);
             }
-            Permutations(lista, 1, new_penalty, Ci);
-            lista.Swap(0, selected_digit);
+            
         }
 
         public void Permutations(List<WitiTask> lista)
@@ -55,8 +63,8 @@ namespace ThreadsAlgorithm
                 
                 lock(resualt)
                 {
-                    Console.Write("kara: " + new_penalty);
-                    Console.WriteLine(lista.MyToString(this.NumberOfTasks) + Environment.NewLine);
+                    //Console.Write("kara: " + new_penalty);
+                    //Console.WriteLine(lista.MyToString(this.NumberOfTasks) + Environment.NewLine);
                     if (resualt.Penaulty > new_penalty)
                     {
                         resualt.Penaulty = new_penalty;

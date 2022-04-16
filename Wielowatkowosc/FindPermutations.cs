@@ -9,22 +9,21 @@ namespace ThreadsAlgorithm
 {
     internal class FindPermutations
     {
-        private WitiResualt resualt;
+        //private WitiResualt resualt;
         private int number_of_tasks;
 
         public FindPermutations(int _tasks)
         {
             number_of_tasks = _tasks;
-            resualt = new WitiResualt(number_of_tasks);
+            //resualt = new WitiResualt(number_of_tasks);
         }
 
-        public WitiResualt Resualt { get { return resualt; } }
+        //public WitiResualt Resualt { get { return resualt; } }
 
         public int NumberOfTasks { get { return number_of_tasks; } }
 
-        public void Permutations(List<WitiTask> lista, int selected_digit, int end_digit)
+        public void Permutations(List<WitiTask> lista, int selected_digit, int end_digit, WitiResualt _resualt)
         {
-            //Thread.Sleep(300);
             for (int i = 0; i < end_digit; i++)
             {
                 WitiTask[] tab1 = new WitiTask[lista.Count];
@@ -38,18 +37,19 @@ namespace ThreadsAlgorithm
                 {
                     new_penalty += list1[0].Weight * (Ci - list1[0].D);
                 }
-                Permutations(list1, 1, new_penalty, Ci);
+                Permutations(list1, 1, new_penalty, Ci, _resualt);
                 list1.Swap(0, selected_digit+i);
             }
-            
         }
 
-        public void Permutations(List<WitiTask> lista)
+        public WitiResualt Permutations(List<WitiTask> lista)
         {
-            Permutations(lista, 0, 0, 0);
+            WitiResualt resualtWiti = new WitiResualt(lista.Count);
+            Permutations(lista, 0, 0, 0, resualtWiti);
+            return resualtWiti;
         }
 
-        private void Permutations(List<WitiTask> lista, int begin, int penalty, int C)
+        private void Permutations(List<WitiTask> lista, int begin, int penalty, int C, WitiResualt resualtWiti)
         {
             if (begin == lista.Count() - 1)
             {
@@ -61,26 +61,24 @@ namespace ThreadsAlgorithm
                     new_penalty += lista[last_item].Weight * (Ci - lista[last_item].D);
                 }
                 
-                lock(resualt)
+                //lock(resualtWiti)
+                //Console.Write("kara: " + new_penalty);
+                //Console.WriteLine(lista.MyToString(this.NumberOfTasks) + Environment.NewLine);
+                if (resualtWiti.Penaulty > new_penalty)
                 {
-                    //Console.Write("kara: " + new_penalty);
-                    //Console.WriteLine(lista.MyToString(this.NumberOfTasks) + Environment.NewLine);
-                    if (resualt.Penaulty > new_penalty)
+                    resualtWiti.Penaulty = new_penalty;
+                    resualtWiti.Permutation.Clear();
+                    foreach (var item in lista)
                     {
-                        resualt.Penaulty = new_penalty;
-                        resualt.Permutation.Clear();
-                        foreach (var item in lista)
-                        {
-                            resualt.Permutation.Add(item);
-                        }
+                        resualtWiti.Permutation.Add(item);
                     }
+                }
 
-                    else if (resualt.Penaulty == new_penalty)
+                else if (resualtWiti.Penaulty == new_penalty)
+                {
+                    foreach (var item in lista)
                     {
-                        foreach (var item in lista)
-                        {
-                            resualt.Permutation.Add(item);
-                        }
+                        resualtWiti.Permutation.Add(item);
                     }
                 }
                 return;
@@ -98,7 +96,7 @@ namespace ThreadsAlgorithm
                     {
                         new_penalty += lista[begin].Weight * (Ci - lista[begin].D);
                     }
-                    this.Permutations(lista, temp_begin, new_penalty, Ci);
+                    this.Permutations(lista, temp_begin, new_penalty, Ci, resualtWiti);
                     lista.Swap(begin, i);
                 }
             }
